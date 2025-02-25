@@ -7,7 +7,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer
 {
     public partial class WordCounterForm : Form
     {
-        private WordCounterFormModelFunc wordCounterFormModel = WordCounterFormModel.create();
+        private IWordCounterFormModel wordCounterFormModel = WordCounterFormModel.create();
         private bool isLoading = false;
 
         public WordCounterForm()

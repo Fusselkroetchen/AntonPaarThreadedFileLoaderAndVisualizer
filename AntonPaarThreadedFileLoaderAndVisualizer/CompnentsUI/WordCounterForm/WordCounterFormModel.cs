@@ -11,10 +11,10 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
     //INTERFACE
     interface WordCounterFormModelFactory
     {
-        static abstract WordCounterFormModelFunc create();
+        static abstract IWordCounterFormModel create();
     }
 
-    interface WordCounterFormModelFunc
+    interface IWordCounterFormModel
     {
         public delegate void DelegateOnViewStateChanged(WordCounterFormModelState state);
         public event DelegateOnViewStateChanged? onViewStateChanged;
@@ -24,13 +24,13 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
     }
 
     //CLASS
-    class WordCounterFormModel : WordCounterFormModelFactory, WordCounterFormModelFunc
+    class WordCounterFormModel : WordCounterFormModelFactory, IWordCounterFormModel
     {
         //DPIS
-        private FileLoaderThreadManagerFunc fileLoaderThreadManager;
+        private IFileLoaderThreadManager fileLoaderThreadManager;
 
         //FACTORY
-        public static WordCounterFormModelFunc create()
+        public static IWordCounterFormModel create()
         {
             return new WordCounterFormModel(
                 FileLoaderThreadManager.create()
@@ -39,7 +39,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 
         //INIT
         private WordCounterFormModel(
-            FileLoaderThreadManagerFunc fileLoaderThreadManager
+            IFileLoaderThreadManager fileLoaderThreadManager
         )
         {
             this.fileLoaderThreadManager = fileLoaderThreadManager;
@@ -55,7 +55,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
         }
 
         //FUNC - MVVM Pattern
-        public event WordCounterFormModelFunc.DelegateOnViewStateChanged? onViewStateChanged;
+        public event IWordCounterFormModel.DelegateOnViewStateChanged? onViewStateChanged;
         private WordCounterFormModelState uiState;
 
         private void applyState()

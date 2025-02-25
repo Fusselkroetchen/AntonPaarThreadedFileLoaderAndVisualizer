@@ -20,11 +20,11 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
     using LoadProgressStatus = int;
 
     //INTERFACES
-    public interface FileLoaderThreadManagerFactory
+    public interface IFileLoaderThreadManagerFactory
     {
-        static abstract FileLoaderThreadManagerFunc create();
+        static abstract IFileLoaderThreadManager create();
     }
-    public interface FileLoaderThreadManagerFunc
+    public interface IFileLoaderThreadManager
     {
         public void loadFileContentThreaded(
             string filePath,
@@ -36,13 +36,13 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
     }
     
     //CLASS
-    class FileLoaderThreadManager : FileLoaderThreadManagerFactory, FileLoaderThreadManagerFunc
+    class FileLoaderThreadManager : IFileLoaderThreadManagerFactory, IFileLoaderThreadManager
     {
         //DPIS
         private IFileLoader fileLoader;
 
         //FACTORY
-        public static FileLoaderThreadManagerFunc create()
+        public static IFileLoaderThreadManager create()
         {
             return new FileLoaderThreadManager(
                 FileLoader.create()

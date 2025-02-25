@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <Folder Include="Components\WordCountParserThreadManager\" />
-    <Folder Include="Components\WordCountParser\" />
     <Folder Include="GenericComponentsUI\" />
     <Folder Include="GenericComponents\FileLoaderThreadManager\" />
   </ItemGroup>
