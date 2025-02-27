@@ -51,5 +51,6 @@ genommen. Wenn es einen Vorgegeben Code-Style gibt schau ich mir diesen natürlic
 
 # sonstiges
 
-Visual Studio 2022 Community Edition wurde verwendet.
+- Visual Studio 2022 Community Edition wurde verwendet.
+- Tests habe ich nur exemplarisch einen gemacht, da dies in der Aufgabe nicht verlangt wurde. Wenn dies noch vervollständigt werden soll kann ich das gerne tun. Tests mit Asynchronen funktionen usw.
 

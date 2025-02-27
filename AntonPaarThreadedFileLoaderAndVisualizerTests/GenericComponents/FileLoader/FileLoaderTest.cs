@@ -11,7 +11,7 @@ public class FileLoaderTest
     public void TestFileNotExists()
     {
 
-        FileLoaderFunc fileLoader = FileLoader.create();
+        IFileLoader fileLoader = FileLoader.create();
         FileLoaderResult result = fileLoader.loadFileContent("C:\\NOTEXISTINGFILE.TXT", null);
 
         Assert.IsTrue(
@@ -29,7 +29,7 @@ public class FileLoaderTest
         // Überprüfe, ob die Test-Datei existiert
         Assert.IsTrue(File.Exists(filePath), $"Die Datei {fileName} existiert nicht.");
 
-        FileLoaderFunc fileLoader = FileLoader.create();
+        IFileLoader fileLoader = FileLoader.create();
         double globalProgress = 0;
         FileLoaderResult result = fileLoader.loadFileContent(filePath, (progress) =>
         {
