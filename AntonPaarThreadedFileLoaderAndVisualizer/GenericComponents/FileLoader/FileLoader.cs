@@ -32,6 +32,19 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
             Action<LoadProgressStatus>? onProgressChanged
         );
 
+        /// <summary>
+        /// Lädt den Datei-Content mit prozess callback in Thead Chunks.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <returns></returns>
+        public Task<FileLoaderResult> loadFileContentChunkedAsync(
+            string filePath,
+            Action<int>? onProgressChanged,
+            int chunkSize = 8192,  // Größere Puffergröße für mehr Performance
+            int parallelTasks = 4  // Anzahl paralleler Lesevorgänge
+        );
+
         public void cancelFileLoad();
     }
 
@@ -46,7 +59,109 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         }
 
         //FUNC
-        private bool isCanceled = false; 
+        private bool isCanceled = false;
+
+        public async Task<FileLoaderResult> loadFileContentChunkedAsync(
+            string filePath,
+            Action<int>? onProgressChanged,
+            int chunkSize = 8192,
+            int parallelTasks = 4
+        )
+        {
+            isCanceled = false;
+
+            if (!File.Exists(filePath))
+            {
+                return new FileLoaderResult
+                {
+                    fileLoadProcessResultStatus = FileLoadProcessResultStatus.fileNotFound
+                };
+            }
+
+            if (!isFileReadableByPermission(filePath))
+            {
+                return new FileLoaderResult
+                {
+                    fileLoadProcessResultStatus = FileLoadProcessResultStatus.permissionDenied
+                };
+            }
+
+            FileInfo fileInfo = new FileInfo(filePath);
+            long totalBytes = fileInfo.Length;
+            long bytesReadTotal = 0;
+
+            // Speicher für die gelesenen Chunks (Reihenfolge bleibt erhalten)
+            string[] chunks = new string[(totalBytes + chunkSize - 1) / chunkSize]; // Array für garantierte Reihenfolge
+
+            object lockObj = new object();
+            long currentOffset = 0;
+
+            List<Task> tasks = new List<Task>();
+
+            for (int i = 0; i < parallelTasks; i++)
+            {
+                tasks.Add(Task.Run(async () =>
+                {
+                    byte[] buffer = new byte[chunkSize];
+
+                    // Jeder Thread bekommt seinen eigenen FileStream!
+                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, chunkSize, true))
+                    {
+                        while (true)
+                        {
+                            long localOffset;
+                            int chunkIndex;
+
+                            // Kritischen Abschnitt synchronisieren
+                            lock (lockObj)
+                            {
+                                if (currentOffset >= totalBytes) break;
+                                localOffset = currentOffset;
+                                chunkIndex = (int)(currentOffset / chunkSize);
+                                currentOffset += chunkSize;
+                            }
+
+                            fs.Seek(localOffset, SeekOrigin.Begin);
+                            int readBytes = await fs.ReadAsync(buffer, 0, chunkSize);
+
+                            if (readBytes == 0) break;
+
+                            string chunkText = Encoding.Default.GetString(buffer, 0, readBytes);
+
+                            lock (lockObj)
+                            {
+                                chunks[chunkIndex] = chunkText; // Richtiger Platz im Array
+                                bytesReadTotal += readBytes;
+                                int progress = (int)((double)bytesReadTotal / totalBytes * 100);
+                                onProgressChanged?.Invoke(progress);
+                            }
+
+                            if (isCanceled) return;
+                        }
+                    }
+                }));
+            }
+
+            await Task.WhenAll(tasks);
+
+            if (isCanceled)
+            {
+                return new FileLoaderResult
+                {
+                    fileLoadProcessResultStatus = FileLoadProcessResultStatus.canceled
+                };
+            }
+
+            // Alle Chunks in der richtigen Reihenfolge zusammenführen
+            string fileContent = string.Concat(chunks);
+
+            return new FileLoaderResult
+            {
+                fileLoadProcessResultStatus = FileLoadProcessResultStatus.success,
+                fileContent = fileContent
+            };
+        }
+
         /// <summary>
         /// Lädt den Datei-Content mit prozess callback.
         /// </summary>
@@ -116,6 +231,8 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
                 };
             }
         }
+
+
         /// <summary>
         /// Checkt datei permission
         /// </summary>

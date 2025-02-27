@@ -81,12 +81,14 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
             var newToken = cts.Token;
             token = newToken;
 
-            task = Task.Run(() => {
+            task = Task.Run(async () => {
                 double progressFPS = 0;
                 double time1 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                 double time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
-                FileLoaderResult result = fileLoader.loadFileContent(filePath, (progress) =>
+                int numThreads = Environment.ProcessorCount;
+
+                FileLoaderResult result = await fileLoader.loadFileContentChunkedAsync(filePath, (progress) =>
                 {
                     //FPS
                     time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
@@ -113,7 +115,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
                         cancellationTokenSource
                     );
 
-                });
+                },8192, numThreads);
 
                 //public void Invoke(Action callback, DispatcherPriority priority, CancellationToken cancellationToken);
 

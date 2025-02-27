@@ -114,8 +114,6 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 
         private void parseFile(string text)
         {
-            int proccessCount = Environment.ProcessorCount;
-
             wordCountParserThreadManager.parseForWordPairsChunked(
                 text,
                 (result) =>
@@ -133,8 +131,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
                     applyState();
                 }, 
                 true, 
-                true, 
-                proccessCount
+                true
             );
         }
 

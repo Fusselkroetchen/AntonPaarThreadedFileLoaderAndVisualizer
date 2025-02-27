@@ -58,8 +58,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
             Action<WordCountParserResult?> onLoadFileContentFinnished,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true,
-            bool descending = true,
-            int numThreads = 4
+            bool descending = true
         );
 
         public void cancelParseForWordPairs();
@@ -200,8 +199,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
             Action<WordCountParserResult?> onLoadFileContentFinnished,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true,
-            bool descending = true,
-            int numThreads = 4
+            bool descending = true
         )
         {
             cancelParseForWordPairs();
@@ -209,6 +207,8 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
             cts = new CancellationTokenSource();
             var newToken = cts.Token;
             token = newToken;
+            
+            int numThreads = Environment.ProcessorCount;
 
             task = Task.Run(() =>
             {
