@@ -246,8 +246,6 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
 
                 }, sortByValue, descending, numThreads);
 
-                //public void Invoke(Action callback, DispatcherPriority priority, CancellationToken cancellationToken);
-
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
                 this.dispatcher.Invoke(
@@ -265,7 +263,6 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
 
         public void cancelParseForWordPairs()
         {
-            //fileLoader.cancelFileLoad();
             cts?.Cancel();
 
             //lock (dispatcherCancellationTokenSourceList) { //Wird nicht benötigt da die Liste Threadsafe ist.
