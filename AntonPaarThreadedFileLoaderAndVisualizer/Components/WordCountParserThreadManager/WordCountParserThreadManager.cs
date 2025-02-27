@@ -296,7 +296,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
                 WordCountParserResult? result = wordCountParser.sortFromLastParsedData(sortByValue, descending);
                 this.dispatcher.Invoke(
                     () => onFinnished(result),
-                    DispatcherPriority.Normal
+                    DispatcherPriority.Send
                 );
             });
         }
