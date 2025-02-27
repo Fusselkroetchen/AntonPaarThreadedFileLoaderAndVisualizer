@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 {
@@ -11,6 +12,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
         public int progress;
         public bool isLoading;
         public string loadAndParseButtonCaption;
-        //public List<>
+        public ListViewItem[]? listViewList;
+        public uint listViewHash;
     }
 }

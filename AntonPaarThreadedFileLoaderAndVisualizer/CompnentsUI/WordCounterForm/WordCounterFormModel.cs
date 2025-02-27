@@ -1,4 +1,7 @@
-﻿using AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents;
+﻿using AntonPaarThreadedFileLoaderAndVisualizer.Components;
+using AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThreadManager;
+using AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents;
+using AntonPaarThreadedFileLoaderAndVisualizer.Ressources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +24,8 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 
         public void loadFile(string filePath);
         public void cancelLoading();
+        public void toggleWordSort();
+        public void toggleCountSort();
     }
 
     //CLASS
@@ -28,21 +33,25 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
     {
         //DPIS
         private IFileLoaderThreadManager fileLoaderThreadManager;
+        private IWordCountParserThreadManager wordCountParserThreadManager;
 
         //FACTORY
         public static IWordCounterFormModel create()
         {
             return new WordCounterFormModel(
-                FileLoaderThreadManager.create()
+                FileLoaderThreadManager.create(),
+                WordCountParserThreadManager.create()
             );
         }
 
         //INIT
         private WordCounterFormModel(
-            IFileLoaderThreadManager fileLoaderThreadManager
+            IFileLoaderThreadManager fileLoaderThreadManager,
+            IWordCountParserThreadManager wordCountParserThreadManager
         )
         {
             this.fileLoaderThreadManager = fileLoaderThreadManager;
+            this.wordCountParserThreadManager = wordCountParserThreadManager;
 
             uiState = new WordCounterFormModelState
             {
@@ -66,16 +75,15 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
         //FUNC - Command Pattern
         public void loadFile(string filePath)
         {
-            uiState.loadAndParseButtonCaption = "Lade- und Parsevorgang abbrechen";
+            uiState.listViewList = null;
+            uiState.loadAndParseButtonCaption = Translations.cancelLoadParse;
             uiState.isLoading = true;
             applyState();
 
             fileLoaderThreadManager.loadFileContentThreaded(
                 filePath, 
                 (result) => {
-                    uiState.isLoading = false;
-                    uiState.loadAndParseButtonCaption = "Datei laden und parsen";
-                    applyState();
+                    processFileLoaderResults(result);
                 }, 
                 (progress) => {
                     if (uiState.isLoading == false) return;
@@ -85,13 +93,85 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
             );
         }
 
-        public void cancelLoading()
+        private void processFileLoaderResults(FileLoaderResult result)
         {
-            fileLoaderThreadManager.cancelLoadFileContentThreaded();
+            switch (result.fileLoadProcessResultStatus)
+            {
+                case FileLoadProcessResultStatus.success:
+                    parseFile(result.fileContent!);
+                    break;
+
+                case FileLoadProcessResultStatus.fileNotFound:
+                case FileLoadProcessResultStatus.permissionDenied:
+                case FileLoadProcessResultStatus.canceled:
+                    resetLoadingState();
+                    break;
+            }
+        }
+
+        private void parseFile(string text)
+        {
+            wordCountParserThreadManager.parseForWordPairsChunked(
+                text,
+                (result) =>
+                {
+                    uiState.listViewList = result.Item1;
+                    uiState.listViewHash = result.Item2;
+
+                    resetLoadingState();
+                },
+                (progress) =>
+                {
+                    if (uiState.isLoading == false) return;
+                    uiState.progress = progress;
+                    applyState();
+                }
+            );
+        }
+
+        private void resetLoadingState()
+        {
+            wordCountParserThreadManager.cancelParseForWordPairs();
+            lastCountDescendSort = false;
+            lastWordDescendSort = false;
             uiState.isLoading = false;
             uiState.progress = 0;
-            uiState.loadAndParseButtonCaption = "Datei laden und parsen";
+            uiState.loadAndParseButtonCaption = Translations.loadFileAndParse;
             applyState();
+        }
+
+        public void cancelLoading()
+        {
+            uiState.loadAndParseButtonCaption = Translations.loadFileAndParse;
+            fileLoaderThreadManager.cancelLoadFileContentThreaded();
+            resetLoadingState();
+        }
+
+        private bool lastWordDescendSort = false;
+
+        public void toggleWordSort()
+        {
+            wordCountParserThreadManager.sortFromLastParsedData((result) =>
+            {
+                uiState.listViewList = result.Item1;
+                uiState.listViewHash = result.Item2;
+                applyState();
+
+                lastWordDescendSort = !lastWordDescendSort;
+            }, false, lastWordDescendSort);
+        }
+
+        private bool lastCountDescendSort = false;
+        public void toggleCountSort()
+        {
+            wordCountParserThreadManager.sortFromLastParsedData((result) =>
+            {
+                uiState.listViewList = result.Item1;
+                uiState.listViewHash = result.Item2;
+                applyState();
+
+                lastCountDescendSort = !lastCountDescendSort;
+            }, true, lastCountDescendSort);
         }
     }
 }

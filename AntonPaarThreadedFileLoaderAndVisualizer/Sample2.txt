@@ -1,0 +1,106 @@
+
+2016-09-30 14:19:38,354	INFO 	User entered screen: 'Menu'
+2016-09-30 14:19:40,746	INFO 	User entered page: 'Xsample 122 Utilities'
+2016-09-30 14:19:42,114	INFO 	User entered screen: 'Rinsing'
+2016-09-30 14:21:11,435	INFO 	User entered page: 'Xsample 122 Module'
+2016-09-30 14:21:14,224	INFO 	User entered screen: 'Menu'
+2016-09-30 14:21:15,454	INFO 	User entered page: 'Xsample 122 Utilities'
+2016-09-30 14:21:16,440	INFO 	User entered screen: 'Initialization'
+2016-09-30 14:21:53,725	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:21:55,234	INFO 	Starting measurement of sample Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:21:55,708	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:23:45,869	INFO 	Starting measurement of sample Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:23:46,069	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:25:30,700	INFO 	User entered page: 'Change Quantity'
+2016-09-30 14:27:16,159	INFO 	Saving sample Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:27:18,173	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Finished, Position: 1, MeasurementType: Standard
+2016-09-30 14:27:42,099	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 2, MeasurementType: Standard
+2016-09-30 14:27:42,126	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 3, MeasurementType: Standard
+2016-09-30 14:27:42,133	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 4, MeasurementType: Standard
+2016-09-30 14:27:42,140	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 5, MeasurementType: Standard
+2016-09-30 14:27:42,148	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 6, MeasurementType: Standard
+2016-09-30 14:27:42,155	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 7, MeasurementType: Standard
+2016-09-30 14:27:42,166	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 8, MeasurementType: Standard
+2016-09-30 14:27:42,174	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 9, MeasurementType: Standard
+2016-09-30 14:27:42,180	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 10, MeasurementType: Standard
+2016-09-30 14:27:42,187	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 11, MeasurementType: Standard
+2016-09-30 14:27:42,193	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 12, MeasurementType: Standard
+2016-09-30 14:27:42,204	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 13, MeasurementType: Standard
+2016-09-30 14:27:42,211	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 14, MeasurementType: Standard
+2016-09-30 14:27:42,222	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 15, MeasurementType: Standard
+2016-09-30 14:27:42,235	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 16, MeasurementType: Standard
+2016-09-30 14:27:42,247	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 17, MeasurementType: Standard
+2016-09-30 14:27:42,255	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 18, MeasurementType: Standard
+2016-09-30 14:27:42,262	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 19, MeasurementType: Standard
+2016-09-30 14:27:42,310	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 20, MeasurementType: Standard
+2016-09-30 14:27:42,317	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 21, MeasurementType: Standard
+2016-09-30 14:27:42,324	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 22, MeasurementType: Standard
+2016-09-30 14:27:42,332	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 23, MeasurementType: Standard
+2016-09-30 14:27:42,378	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 24, MeasurementType: Standard
+2016-09-30 14:28:45,800	INFO 	User entered screen: 'Menu'
+2016-09-30 14:28:48,111	INFO 	User entered screen: 'Setup'
+2016-09-30 14:28:50,204	INFO 	User entered screen: 'Setup'
+2016-09-30 14:28:51,976	INFO 	User entered screen: 'Measuring System Settings'
+2016-09-30 14:28:53,183	INFO 	User entered screen: 'Sample List'
+2016-09-30 14:28:55,875	INFO 	User entered screen: 'Sample List / Sample Settings'
+2016-09-30 14:30:25,940	INFO 	User entered screen: 'Menu'
+2016-09-30 14:30:27,863	INFO 	User entered screen: 'Data Memory'
+2016-09-30 14:30:33,997	INFO 	User entered screen: 'Measured Data'
+2016-09-30 14:31:46,892	INFO 	User entered screen: 'Menu'
+2016-09-30 14:31:48,088	INFO 	User entered page: 'Xsample 122 Utilities'
+2016-09-30 14:31:50,447	INFO 	User entered screen: 'Rinsing'
+2016-09-30 14:38:57,234	INFO 	User entered page: 'Change Quantity'
+2016-09-30 14:39:36,831	INFO 	User entered page: 'Sample List'
+2016-09-30 14:39:48,181	INFO 	User entered screen: 'Menu'
+2016-09-30 14:39:49,684	INFO 	User entered screen: 'Setup'
+2016-09-30 14:39:54,759	INFO 	User entered screen: 'Expert Settings'
+2016-09-30 14:40:00,916	INFO 	User entered screen: 'Setup'
+2016-09-30 14:40:07,906	INFO 	User entered screen: 'Control Panel'
+2016-09-30 14:40:12,842	INFO 	User entered screen: 'Expert Settings'
+2016-09-30 14:40:19,500	INFO 	User entered screen: 'Methods'
+2016-09-30 14:40:20,508	INFO 	User entered screen: 'Method Settings'
+2016-09-30 14:40:23,661	INFO 	User entered page: 'Syrup Fresh (Current Method)'
+2016-09-30 14:40:33,723	INFO 	User entered screen: 'Setup'
+2016-09-30 14:40:34,588	INFO 	User entered screen: 'Measuring System Settings'
+2016-09-30 14:40:35,795	INFO 	User entered screen: 'Sample List'
+2016-09-30 14:40:38,242	INFO 	User entered screen: 'Sample List / Sample Settings'
+2016-09-30 14:40:57,750	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:40:58,576	INFO 	Starting measurement of sample Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:40:58,845	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:42:43,772	INFO 	Starting measurement of sample Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:42:43,842	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:45:28,997	INFO 	Saving sample Name: '', ErrorState: NoError, State: Measuring, Position: 1, MeasurementType: Standard
+2016-09-30 14:45:29,607	INFO 	Sample changed: Name: '', ErrorState: NoError, State: Finished, Position: 1, MeasurementType: Standard
+2016-09-30 14:45:50,905	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 2, MeasurementType: Standard
+2016-09-30 14:45:50,967	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 3, MeasurementType: Standard
+2016-09-30 14:45:50,994	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 4, MeasurementType: Standard
+2016-09-30 14:45:51,013	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 5, MeasurementType: Standard
+2016-09-30 14:45:51,024	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 6, MeasurementType: Standard
+2016-09-30 14:45:51,032	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 7, MeasurementType: Standard
+2016-09-30 14:45:51,038	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 8, MeasurementType: Standard
+2016-09-30 14:45:51,045	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 9, MeasurementType: Standard
+2016-09-30 14:45:51,053	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 10, MeasurementType: Standard
+2016-09-30 14:45:51,059	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 11, MeasurementType: Standard
+2016-09-30 14:45:51,066	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 12, MeasurementType: Standard
+2016-09-30 14:45:51,075	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 13, MeasurementType: Standard
+2016-09-30 14:45:51,089	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 14, MeasurementType: Standard
+2016-09-30 14:45:51,098	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 15, MeasurementType: Standard
+2016-09-30 14:45:51,106	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 16, MeasurementType: Standard
+2016-09-30 14:45:51,114	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 17, MeasurementType: Standard
+2016-09-30 14:45:51,121	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 18, MeasurementType: Standard
+2016-09-30 14:45:51,129	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 19, MeasurementType: Standard
+2016-09-30 14:45:51,137	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 20, MeasurementType: Standard
+2016-09-30 14:45:51,148	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 21, MeasurementType: Standard
+2016-09-30 14:45:51,157	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 22, MeasurementType: Standard
+2016-09-30 14:45:51,164	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 23, MeasurementType: Standard
+2016-09-30 14:45:51,172	INFO 	Sample changed: Name: '', ErrorState: VialNotFound, State: Finished, Position: 24, MeasurementType: Standard
+2016-09-30 14:46:17,913	INFO 	User entered screen: 'Menu'
+2016-10-07 08:44:31,294	INFO 	--------------------------------------------------------------------------------
+2016-10-07 08:44:31,336	INFO 	Starting MLA Application
+2016-10-07 08:44:31,340	INFO 	--------------------------------------------------------------------------------
+2016-10-07 08:44:32,334	INFO 	Starting software... Version: 2.90.2132.121
+2016-10-07 08:45:21,562	INFO 	Found module 'Anton Paar MLA DCB', Hardware Version '2.000.000', Firmware Version '2.003.035', Device Serial '20904906', PCB Serial '81879007'
+2016-10-07 08:45:21,597	INFO 	Found module 'DMA_Density', Hardware Version '2.000.000', Firmware Version '2.005.008', Device Serial '81879007', PCB Serial '20904906'
+2016-10-07 08:45:21,602	INFO 	Found module 'Anton Paar Xsample 122', Hardware Version '2.000.000', Firmware Version '3.000.068', Device Serial '18970029', PCB Serial '80370727'
+2016-10-07 08:46:09,787	INFO 	User changed, new user is 'Administrator'
+2016-10-07 08:52:31,234	INFO 	User entered screen: 'Menu'

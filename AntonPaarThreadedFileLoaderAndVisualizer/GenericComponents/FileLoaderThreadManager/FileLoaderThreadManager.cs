@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+//using System.Collections.Generic;
+//using System.Diagnostics;
+//using System.Linq;
+//using System.Text;
+//using System.Threading;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -65,7 +65,6 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         private Task? task;
         private CancellationTokenSource? cts;
         private CancellationToken? token;
-        //Hier könnte auch BlockingList, 
         private ConcurrentQueue<CancellationTokenSource> dispatcherCancellationTokenSourceList = new ConcurrentQueue<CancellationTokenSource>();
         public void loadFileContentThreaded(
             string filePath,
@@ -143,8 +142,6 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
                 dispatcherCancellationTokenSourceList.Clear();
             //}
         }
-
-        //private void invoke
 
         ~FileLoaderThreadManager() {
             cancelLoadFileContentThreaded();

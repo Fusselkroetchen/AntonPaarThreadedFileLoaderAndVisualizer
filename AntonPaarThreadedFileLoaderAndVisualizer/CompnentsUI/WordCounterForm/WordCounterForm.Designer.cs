@@ -31,6 +31,8 @@
             progressBar1 = new ProgressBar();
             button1 = new Button();
             listView1 = new ListView();
+            columnHeader1 = new ColumnHeader();
+            columnHeader2 = new ColumnHeader();
             SuspendLayout();
             // 
             // progressBar1
@@ -52,11 +54,29 @@
             // 
             // listView1
             // 
+            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2 });
+            listView1.FullRowSelect = true;
+            listView1.GridLines = true;
+            listView1.ImeMode = ImeMode.On;
             listView1.Location = new Point(12, 74);
             listView1.Name = "listView1";
-            listView1.Size = new Size(776, 324);
-            listView1.TabIndex = 3;
+            listView1.RightToLeft = RightToLeft.Yes;
+            listView1.Size = new Size(776, 327);
+            listView1.TabIndex = 5;
             listView1.UseCompatibleStateImageBehavior = false;
+            listView1.View = View.Details;
+            listView1.ColumnClick += listView1_ColumnClick;
+            // 
+            // columnHeader1
+            // 
+            columnHeader1.Text = "Wort";
+            columnHeader1.Width = 370;
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "Anzahl";
+            columnHeader2.TextAlign = HorizontalAlignment.Right;
+            columnHeader2.Width = 370;
             // 
             // WordCounterForm
             // 
@@ -76,5 +96,7 @@
         private ProgressBar progressBar1;
         private Button button1;
         private ListView listView1;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
     }
 }

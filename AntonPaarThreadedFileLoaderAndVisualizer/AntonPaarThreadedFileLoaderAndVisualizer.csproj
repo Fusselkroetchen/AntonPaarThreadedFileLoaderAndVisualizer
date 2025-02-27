@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Components\WordCountParserThreadManager\" />
     <Folder Include="GenericComponentsUI\" />
     <Folder Include="GenericComponents\FileLoaderThreadManager\" />
   </ItemGroup>
@@ -21,6 +20,9 @@
 
   <ItemGroup>
     <None Update="Sample.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sample2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
