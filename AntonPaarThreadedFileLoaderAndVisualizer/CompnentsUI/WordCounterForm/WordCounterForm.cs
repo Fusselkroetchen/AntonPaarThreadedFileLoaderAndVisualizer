@@ -22,6 +22,15 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer
             wordCounterFormModel.onViewStateChanged += WordCounterFormModel_onViewStateChanged;
         }
 
+        ~WordCounterForm ()
+        {
+            wordCounterFormModel.onViewStateChanged -= WordCounterFormModel_onViewStateChanged;
+        }
+
+        /// <summary>
+        /// MVVM UI State change
+        /// </summary>
+        /// <param name="state"></param>
         private void WordCounterFormModel_onViewStateChanged(WordCounterFormModelState state)
         {
             progressBar1.Value = state.progress;
@@ -36,6 +45,11 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer
             }
         }
 
+        /// <summary>
+        /// File open dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             if (isLoading)
@@ -60,6 +74,11 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer
             }
         }
 
+        /// <summary>
+        /// Sortierungsänderung durch Klick auf Header
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
         {
 

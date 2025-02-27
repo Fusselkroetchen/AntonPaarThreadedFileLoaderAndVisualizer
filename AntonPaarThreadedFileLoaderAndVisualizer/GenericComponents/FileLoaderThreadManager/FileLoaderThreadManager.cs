@@ -4,10 +4,8 @@ using System.Windows;
 using System.Windows.Threading;
 
 /**
- * Bei dem FileLoader und dem FileLoaderThreadManager wurde besonders auf Clean Code geachtet.
- * Ggf. mit mehr Recherche hätte auch noch die Geschwindigkeit beim Laden optimiert werden können,
- * so dass jeder Buffer-Abschnitt im Stream mit einem Thread ausgelesen wird.
- * Mir war aber die saubere Trennung der Themen nach SOLID in dem Fall wichtiger.
+ * Aufgabentrennung zwischen Thread Managing und File-Load.
+ * Die Thread-Manager entkoppeln noch einmal die Aufgaben von der UI vollständig.
  */
 namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
 {
@@ -20,6 +18,12 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
     }
     public interface IFileLoaderThreadManager
     {
+        /// <summary>
+        /// Dies Wrapped den Datei-Ladeprozess in einen Thread mit asynchronen callback.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="onLoadFileContentFinnished"></param>
+        /// <param name="onProgressChanged"></param>
         public void loadFileContentThreaded(
             string filePath,
             Action<FileLoaderResult> onLoadFileContentFinnished,
@@ -60,6 +64,12 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         private CancellationTokenSource? cts;
         private CancellationToken? token;
         private ConcurrentQueue<CancellationTokenSource> dispatcherCancellationTokenSourceList = new ConcurrentQueue<CancellationTokenSource>();
+        /// <summary>
+        /// Dies Wrapped den Datei-Ladeprozess in einen Thread mit asynchronen callback.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="onLoadFileContentFinnished"></param>
+        /// <param name="onProgressChanged"></param>
         public void loadFileContentThreaded(
             string filePath,
             Action<FileLoaderResult> onLoadFileContentFinnished,

@@ -7,6 +7,9 @@ using System.Windows.Forms;
 
 namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 {
+    /// <summary>
+    /// Dies ist der ViewState laut MVVM-Pattern
+    /// </summary>
     struct WordCounterFormModelState
     {
         public int progress;

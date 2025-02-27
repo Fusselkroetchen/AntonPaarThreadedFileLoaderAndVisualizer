@@ -1,1 +1,1 @@
-nuget.exe restore Lichtknarre.sln
+nuget.exe restore AntonPaarThreadedFileLoaderAndVisualizer/AntonPaarThreadedFileLoaderAndVisualizer.sln

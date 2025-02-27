@@ -17,46 +17,43 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
     }
     interface IWordCountParser
     {
-        public (ListViewItem[], uint) parseForWordPairs(
+        /// <summary>
+        /// Erste iteration der Funktion. Wurde weiter entwickelt zu parseForWordPairsChunked.
+        /// Aus Demonstrationszwecken immer noch vorhanden.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
+        /// <returns></returns>
+        public WordCountParserResult? parseForWordPairs(
             string text,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true, 
             bool descending = true
         );
-        public (ListViewItem[], uint) parseForWordPairsChunked(
+
+        /// <summary>
+        /// Nutzt Hardware ressourcen Vollständig aus, ohne die UI zu blockieren. Somit geht das Parsen viel
+        /// schneller.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
+        /// <param name="numThreads"></param>
+        /// <returns></returns>
+        public WordCountParserResult? parseForWordPairsChunked(
             string text,
             Action<int> onProgressChanged,
             bool sortByValue = true,
             bool descending = true,
             int numThreads = 4
         );
-        public (ListViewItem[], uint) sortFromLastParsedData(
-            bool sortByValue = true, 
-            bool descending = true
-        );
-    }
-
-    //CLASS
-    class WordCountParser : IWordCountParserFactory, IWordCountParser
-    {
-        //DPI
-
-        //FACTORY
-        public static IWordCountParser create()
-        {
-            return new WordCountParser(
-
-            );
-        }
-
-        //INIT
-        private WordCountParser()
-        {
-
-        }
-
-        //FUNC
-        private Dictionary<string, int> lastResultsParsedDictonary;
 
         /// <summary>
         /// Wenn der Benutzer sortieren möchte muss nicht die ganze Liste neu geparsed werden.
@@ -65,14 +62,51 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
         /// <param name="sortByValue"></param>
         /// <param name="descending"></param>
         /// <returns></returns>
-        public (ListViewItem[], uint) sortFromLastParsedData(
+        public WordCountParserResult? sortFromLastParsedData(
+            bool sortByValue = true, 
+            bool descending = true
+        );
+    }
+
+    //CLASS
+    class WordCountParser : IWordCountParserFactory, IWordCountParser
+    {
+        //FACTORY
+        public static IWordCountParser create()
+        {
+            return new WordCountParser();
+        }
+
+        //FUNC
+        private Dictionary<string, int>? lastResultsParsedDictonary;
+
+        /// <summary>
+        /// Wenn der Benutzer sortieren möchte muss nicht die ganze Liste neu geparsed werden.
+        /// Somit kann vom letzten geparsten Stand neu sortiert werden.
+        /// </summary>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
+        /// <returns></returns>
+        public WordCountParserResult? sortFromLastParsedData(
             bool sortByValue = true, bool descending = true
         )
         {
+            if (lastResultsParsedDictonary == null) return null;
             return sortAndConvertData(lastResultsParsedDictonary, sortByValue, descending);
         }
 
-        public (ListViewItem[], uint) parseForWordPairs(  
+        /// <summary>
+        /// Erste iteration der Funktion. Wurde weiter entwickelt zu parseForWordPairsChunked.
+        /// Aus Demonstrationszwecken immer noch vorhanden.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
+        /// <returns></returns>
+        public WordCountParserResult? parseForWordPairs(  
             string text,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true, bool descending = true
@@ -102,7 +136,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
             return sortAndConvertData(wordCounts, sortByValue, descending);
         }
 
-        private (ListViewItem[], uint) sortAndConvertData(
+        private WordCountParserResult sortAndConvertData(
             Dictionary<string, int> wordCounts, 
             bool sortByValue = true, 
             bool descending = true
@@ -126,12 +160,14 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
                 .Select(item => new ListViewItem(new[] { item.Key, item.Value.ToString() }))
                 .ToArray();
 
-            return (result, ComputeFNV1aHash(result));
+            return new WordCountParserResult() { data = result, hash = ComputeFNV1aHash(result) }; ;
         }
 
         /// <summary>
         /// Nutzt Hardware ressourcen Vollständig aus, ohne die UI zu blockieren. Somit geht das Parsen viel
         /// schneller.
+        /// 
+        /// Zählt vorhandene Wörter.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="onProgressChanged"></param>
@@ -139,7 +175,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
         /// <param name="descending"></param>
         /// <param name="numThreads"></param>
         /// <returns></returns>
-        public (ListViewItem[], uint) parseForWordPairsChunked(
+        public WordCountParserResult? parseForWordPairsChunked(
             string text,
             Action<int> onProgressChanged,
             bool sortByValue = true,
@@ -150,7 +186,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
             string[] words = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             int totalWords = words.Length;
 
-            if (totalWords == 0) return (Array.Empty<ListViewItem>(),0);
+            if (totalWords == 0) return null;
 
             // Dynamische Anpassung: Falls es mehr Threads als Wörter gibt, reduzieren
             numThreads = Math.Min(numThreads, totalWords);

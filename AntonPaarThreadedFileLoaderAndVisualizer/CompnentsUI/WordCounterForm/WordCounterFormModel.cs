@@ -12,7 +12,7 @@ using System.Windows.Threading;
 namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 {
     //INTERFACE
-    interface WordCounterFormModelFactory
+    interface IWordCounterFormModelFactory
     {
         static abstract IWordCounterFormModel create();
     }
@@ -29,11 +29,14 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
     }
 
     //CLASS
-    class WordCounterFormModel : WordCounterFormModelFactory, IWordCounterFormModel
+    /// <summary>
+    /// Die ist das View-Model für die WPS-Form nach MVVM/Command-Pattern
+    /// </summary>
+    class WordCounterFormModel : IWordCounterFormModelFactory, IWordCounterFormModel
     {
         //DPIS
-        private IFileLoaderThreadManager fileLoaderThreadManager;
-        private IWordCountParserThreadManager wordCountParserThreadManager;
+        private readonly IFileLoaderThreadManager fileLoaderThreadManager;
+        private readonly IWordCountParserThreadManager wordCountParserThreadManager;
 
         //FACTORY
         public static IWordCounterFormModel create()
@@ -69,7 +72,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 
         private void applyState()
         {
-            if (onViewStateChanged != null) onViewStateChanged(uiState);
+            onViewStateChanged?.Invoke(uiState);
         }
 
         //FUNC - Command Pattern
@@ -111,13 +114,16 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
 
         private void parseFile(string text)
         {
+            int proccessCount = Environment.ProcessorCount;
+
             wordCountParserThreadManager.parseForWordPairsChunked(
                 text,
                 (result) =>
                 {
-                    uiState.listViewList = result.Item1;
-                    uiState.listViewHash = result.Item2;
-
+                    if (result != null) { 
+                        uiState.listViewList = result.Value.data;
+                        uiState.listViewHash = result.Value.hash;
+                    }
                     resetLoadingState();
                 },
                 (progress) =>
@@ -125,7 +131,10 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
                     if (uiState.isLoading == false) return;
                     uiState.progress = progress;
                     applyState();
-                }
+                }, 
+                true, 
+                true, 
+                proccessCount
             );
         }
 
@@ -153,8 +162,10 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
         {
             wordCountParserThreadManager.sortFromLastParsedData((result) =>
             {
-                uiState.listViewList = result.Item1;
-                uiState.listViewHash = result.Item2;
+                if (result != null) { 
+                    uiState.listViewList = result.Value.data;
+                    uiState.listViewHash = result.Value.hash;
+                }
                 applyState();
 
                 lastWordDescendSort = !lastWordDescendSort;
@@ -166,8 +177,11 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.CompnentsUI.WordCounterForm
         {
             wordCountParserThreadManager.sortFromLastParsedData((result) =>
             {
-                uiState.listViewList = result.Item1;
-                uiState.listViewHash = result.Item2;
+                if (result != null)
+                {
+                    uiState.listViewList = result.Value.data;
+                    uiState.listViewHash = result.Value.hash;
+                }
                 applyState();
 
                 lastCountDescendSort = !lastCountDescendSort;

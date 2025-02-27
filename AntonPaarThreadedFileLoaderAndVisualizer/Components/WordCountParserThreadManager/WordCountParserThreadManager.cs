@@ -5,6 +5,12 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 
+/**
+ * Aufgabentrennung zwischen Thread Managing und Wordzählung.
+ * Die Thread-Manager entkoppeln noch einmal die Aufgaben von der UI vollständig.
+ * Das heißt nicht, dass beim Parsen zur Geschwindigkeitsoptimierung keine Threads 
+ * verwendet werden können. Hier geht es nur um die Entkoppelung.
+ */
 namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThreadManager
 {
     using LoadProgressStatus = int;
@@ -16,17 +22,40 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
     }
     public interface IWordCountParserThreadManager
     {
+        /// <summary>
+        /// Erste iteration der Funktion. Wurde weiter entwickelt zu parseForWordPairsChunked.
+        /// Aus Demonstrationszwecken immer noch vorhanden.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onLoadFileContentFinnished"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
         public void parseForWordPairs(
             string text,
-            Action<(ListViewItem[], uint)> onLoadFileContentFinnished,
+            Action<WordCountParserResult?> onLoadFileContentFinnished,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true,
             bool descending = true
         );
 
+        /// <summary>
+        /// Nutzt Hardware ressourcen Vollständig aus, ohne die UI zu blockieren. Somit geht das Parsen viel
+        /// schneller.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onLoadFileContentFinnished"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
+        /// <param name="numThreads"></param>
         public void parseForWordPairsChunked(
             string text,
-            Action<(ListViewItem[], uint)> onLoadFileContentFinnished,
+            Action<WordCountParserResult?> onLoadFileContentFinnished,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true,
             bool descending = true,
@@ -35,8 +64,15 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
 
         public void cancelParseForWordPairs();
 
+        /// <summary>
+        /// Wenn der Benutzer sortieren möchte muss nicht die ganze Liste neu geparsed werden.
+        /// Somit kann vom letzten geparsten Stand neu sortiert werden.
+        /// </summary>
+        /// <param name="onFinnished"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
         public void sortFromLastParsedData(
-            Action<(ListViewItem[], uint)> onFinnished, 
+            Action<WordCountParserResult?> onFinnished, 
             bool sortByValue = true,
             bool descending = true
         );
@@ -71,9 +107,21 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
         private CancellationTokenSource? cts;
         private CancellationToken? token;
         private ConcurrentQueue<CancellationTokenSource> dispatcherCancellationTokenSourceList = new ConcurrentQueue<CancellationTokenSource>();
+
+        /// <summary>
+        /// Erste iteration der Funktion. Wurde weiter entwickelt zu parseForWordPairsChunked.
+        /// Aus Demonstrationszwecken immer noch vorhanden.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onLoadFileContentFinnished"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
         public void parseForWordPairs(
             string text,
-            Action<(ListViewItem[], uint)> onLoadFileContentFinnished,
+            Action<WordCountParserResult?> onLoadFileContentFinnished,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true,
             bool descending = true
@@ -89,7 +137,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
                 double time1 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                 double time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
-                (ListViewItem[], uint) result = wordCountParser.parseForWordPairs(text, (progress) =>
+                WordCountParserResult? result = wordCountParser.parseForWordPairs(text, (progress) =>
                 {
                     //FPS
                     time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
@@ -135,9 +183,21 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
             }, newToken);
         }
 
+        /// <summary>
+        /// Nutzt Hardware ressourcen Vollständig aus, ohne die UI zu blockieren. Somit geht das Parsen viel
+        /// schneller.
+        /// 
+        /// Zählt vorhandene Wörter.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="onLoadFileContentFinnished"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
+        /// <param name="numThreads"></param>
         public void parseForWordPairsChunked(
             string text,
-            Action<(ListViewItem[], uint)> onLoadFileContentFinnished,
+            Action<WordCountParserResult?> onLoadFileContentFinnished,
             Action<LoadProgressStatus>? onProgressChanged,
             bool sortByValue = true,
             bool descending = true,
@@ -156,7 +216,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
                 double time1 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                 double time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
-                (ListViewItem[], uint) result = wordCountParser.parseForWordPairsChunked(text, (progress) =>
+                WordCountParserResult? result = wordCountParser.parseForWordPairsChunked(text, (progress) =>
                 {
                     //FPS
                     time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
@@ -218,15 +278,22 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
             //}
         }
 
+        /// <summary>
+        /// Wenn der Benutzer sortieren möchte muss nicht die ganze Liste neu geparsed werden.
+        /// Somit kann vom letzten geparsten Stand neu sortiert werden.
+        /// </summary>
+        /// <param name="onFinnished"></param>
+        /// <param name="sortByValue"></param>
+        /// <param name="descending"></param>
         public void sortFromLastParsedData(
-            Action<(ListViewItem[], uint)> onFinnished,
+            Action<WordCountParserResult?> onFinnished,
             bool sortByValue = true,
             bool descending = true
         )
         {
             task = Task.Run(() =>
             {
-                (ListViewItem[], uint) result = wordCountParser.sortFromLastParsedData(sortByValue, descending);
+                WordCountParserResult? result = wordCountParser.sortFromLastParsedData(sortByValue, descending);
                 this.dispatcher.Invoke(
                     () => onFinnished(result),
                     DispatcherPriority.Normal

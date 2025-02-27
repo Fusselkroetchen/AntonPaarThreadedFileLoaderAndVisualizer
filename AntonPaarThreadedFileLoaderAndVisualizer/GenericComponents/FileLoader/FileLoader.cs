@@ -21,7 +21,12 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
 
     public interface IFileLoader
     {
-
+        /// <summary>
+        /// Lädt den Datei-Content mit prozess callback.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <returns></returns>
         public FileLoaderResult loadFileContent(
             string filePath,
             Action<LoadProgressStatus>? onProgressChanged
@@ -34,22 +39,20 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
 
     public class FileLoader : IFileLoader, IFileLoaderFactory
     {
-        //DPIs
-
         //Factory
         public static IFileLoader create()
         {
             return new FileLoader();
         }
 
-        //INIT
-        private FileLoader()
-        {
-
-        }
-
         //FUNC
         private bool isCanceled = false; 
+        /// <summary>
+        /// Lädt den Datei-Content mit prozess callback.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <returns></returns>
         public FileLoaderResult loadFileContent(
             string filePath, 
             Action<LoadProgressStatus>? onProgressChanged
@@ -113,7 +116,11 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
                 };
             }
         }
-
+        /// <summary>
+        /// Checkt datei permission
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         private bool isFileReadableByPermission(string filePath)
         {
             // Überprüfen der Leseberechtigung
