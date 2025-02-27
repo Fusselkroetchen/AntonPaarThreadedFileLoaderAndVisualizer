@@ -48,3 +48,8 @@ Daher die Nuget-Abhängigkeit.
 C# in Visual Studio stellt bei den Benamungsregeln eine Ausnahme zu den meisten 
 Programmiersprachen. Ehrlich gesagt habe ich mir das Benamungsschema nie wirklich zu herzen 
 genommen. Wenn es einen Vorgegeben Code-Style gibt schau ich mir diesen natürlich gerne an.
+
+# sonstiges
+
+Visual Studio 2022 Community Edition wurde verwendet.
+
