@@ -90,7 +90,7 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
                 numThreads -= 1;
                 if (numThreads < 1) numThreads = 1;
 
-                FileLoaderResult result = await fileLoader.loadFileContentChunkedAsync(filePath, (progress) =>
+                Action<int> onProgress = (progress) =>
                 {
                     //FPS
                     time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
@@ -100,27 +100,28 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
 
                     //Zuviele Zugriffe auf den UI Thread wird unterbunden, so das die UI nicht ausgebremst wird.
                     //Maximal X Zugriffe in der Sekunde. Nagut ist nicht wirklich notwendig hier aber so als Beispiel.
-                    if (progressFPS > 5) { return; } 
+                    if (progressFPS > 5) { return; }
 
                     //FPS begrenzen
                     CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
                     this.dispatcher.Invoke(
-                        () => { 
+                        () => {
                             if (onProgressChanged != null) onProgressChanged(progress);
-                        }, 
-                        DispatcherPriority.ApplicationIdle, 
+                        },
+                        DispatcherPriority.ApplicationIdle,
                         cancellationTokenSource.Token
                     );
 
                     dispatcherCancellationTokenSourceList.Enqueue(
                         cancellationTokenSource
                     );
+                };
 
-                },8192, numThreads);
-
-                //public void Invoke(Action callback, DispatcherPriority priority, CancellationToken cancellationToken);
-
+                //Hier kann die Funktion für Core Affinity getestet werden, bei Bedarf.
+                //FileLoaderResult result = fileLoader.LoadFileContentChunkedWithCoreAffinity(filePath, onProgress, 8192, numThreads * 20);
+                FileLoaderResult result = await fileLoader.loadFileContentChunkedAsync(filePath, onProgress, 8192, numThreads);
+                
                 CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
                 this.dispatcher.Invoke(
