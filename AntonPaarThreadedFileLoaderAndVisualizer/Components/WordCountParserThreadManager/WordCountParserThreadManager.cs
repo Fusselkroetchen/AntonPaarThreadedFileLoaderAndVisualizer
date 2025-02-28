@@ -207,8 +207,10 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components.WordCountParserThr
             cts = new CancellationTokenSource();
             var newToken = cts.Token;
             token = newToken;
-            
+
             int numThreads = Environment.ProcessorCount;
+            numThreads -= 1;
+            if (numThreads < 1) numThreads = 1;
 
             task = Task.Run(() =>
             {

@@ -87,6 +87,8 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
                 double time2 = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
                 int numThreads = Environment.ProcessorCount;
+                numThreads -= 1;
+                if (numThreads < 1) numThreads = 1;
 
                 FileLoaderResult result = await fileLoader.loadFileContentChunkedAsync(filePath, (progress) =>
                 {
