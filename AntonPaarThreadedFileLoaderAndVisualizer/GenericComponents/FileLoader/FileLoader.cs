@@ -37,12 +37,33 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="onProgressChanged"></param>
+        /// <param name="chunkSize">bytes</param>
+        /// <param name="parallelTasks"></param>
         /// <returns></returns>
         public Task<FileLoaderResult> loadFileContentChunkedAsync(
             string filePath,
             Action<int>? onProgressChanged,
             int chunkSize = 8192,  // Größere Puffergröße für mehr Performance
             int parallelTasks = 4  // Anzahl paralleler Lesevorgänge
+        );
+
+        /// <summary>
+        /// Lädt den Datei-Content mit prozess callback in Thead Chunks.
+        /// Wenn ich weiß, dass das System mehrere Cores hat nutzt diese
+        /// Funktion alle physischen Cores außer den 0, welcher den UI Thread
+        /// verwaltet. Wenn diese Funktion angewandt wird sollte noch sicher gestellt
+        /// werden, dass die App auf dem 0 physichen Core arbeitet.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="onProgressChanged"></param>
+        /// <param name="chunkSize">bytes</param>
+        /// <param name="parallelThreads"></param>
+        /// <returns></returns>
+        public FileLoaderResult LoadFileContentChunkedWithCoreAffinity(
+            string filePath,
+            Action<int>? onProgressChanged,
+            int chunkSize = 8192,
+            int parallelThreads = 4
         );
 
         public void cancelFileLoad();
@@ -60,6 +81,110 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
 
         //FUNC
         private bool isCanceled = false;
+
+        public FileLoaderResult LoadFileContentChunkedWithCoreAffinity(
+            string filePath,
+            Action<int>? onProgressChanged,
+            int chunkSize = 8192,
+            int parallelThreads = 4
+        )
+        {
+            isCanceled = false;
+
+            if (!File.Exists(filePath))
+            {
+                return new FileLoaderResult { fileLoadProcessResultStatus = FileLoadProcessResultStatus.fileNotFound };
+            }
+
+            if (!isFileReadableByPermission(filePath))
+            {
+                return new FileLoaderResult { fileLoadProcessResultStatus = FileLoadProcessResultStatus.permissionDenied };
+            }
+
+            FileInfo fileInfo = new FileInfo(filePath);
+            long totalBytes = fileInfo.Length;
+            long bytesReadTotal = 0;
+
+            string[] chunks = new string[(totalBytes + chunkSize - 1) / chunkSize];
+            object lockObj = new object();
+            long currentOffset = 0;
+            List<Thread> threads = new List<Thread>();
+            int coreCount = Environment.ProcessorCount;
+            int coreMask = (1 << coreCount) - 2; // Alle Cores außer Core 0
+
+            for (int i = 0; i < parallelThreads; i++)
+            {
+                Thread thread = new Thread(() =>
+                {
+                    byte[] buffer = new byte[chunkSize];
+
+                    using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        while (true)
+                        {
+                            long localOffset;
+                            int chunkIndex;
+
+                            lock (lockObj)
+                            {
+                                if (currentOffset >= totalBytes || isCanceled) break;
+                                localOffset = currentOffset;
+                                chunkIndex = (int)(currentOffset / chunkSize);
+                                currentOffset += chunkSize;
+                            }
+
+                            fs.Seek(localOffset, SeekOrigin.Begin);
+                            int readBytes = fs.Read(buffer, 0, chunkSize);
+
+                            if (readBytes == 0) break;
+
+                            string chunkText = Encoding.Default.GetString(buffer, 0, readBytes);
+
+                            lock (lockObj)
+                            {
+                                chunks[chunkIndex] = chunkText;
+                                bytesReadTotal += readBytes;
+                                int progress = (int)((double)bytesReadTotal / totalBytes * 100);
+                                onProgressChanged?.Invoke(progress);
+                            }
+                        }
+                    }
+                });
+
+                // CPU-Affinität setzen (alle Cores außer Core 0)
+                thread.Start();
+                int cpuIndex = (i % (coreCount - 1)) + 1; // Skip Core 0
+                SetThreadAffinity(thread, cpuIndex);
+                threads.Add(thread);
+            }
+
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
+
+            if (isCanceled)
+            {
+                return new FileLoaderResult { fileLoadProcessResultStatus = FileLoadProcessResultStatus.canceled };
+            }
+
+            string fileContent = string.Concat(chunks);
+            return new FileLoaderResult
+            {
+                fileLoadProcessResultStatus = FileLoadProcessResultStatus.success,
+                fileContent = fileContent
+            };
+        }
+
+        private void SetThreadAffinity(Thread thread, int cpuIndex)
+        {
+            int mask = 1 << cpuIndex;
+            Thread.BeginThreadAffinity();
+            SetThreadAffinityMask(thread.ManagedThreadId, mask);
+        }
+
+        [System.Runtime.InteropServices.DllImport("kernel32.dll")]
+        private static extern int SetThreadAffinityMask(int hThread, int dwThreadAffinityMask);
 
         public async Task<FileLoaderResult> loadFileContentChunkedAsync(
             string filePath,
