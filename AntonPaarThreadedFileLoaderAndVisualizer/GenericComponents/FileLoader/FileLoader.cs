@@ -53,6 +53,8 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         /// Funktion alle physischen Cores außer den 0, welcher den UI Thread
         /// verwaltet. Wenn diese Funktion angewandt wird sollte noch sicher gestellt
         /// werden, dass die App auf dem 0 physichen Core arbeitet.
+        /// !!! Diese Funktion wird nicht angewandt und ist aus Demonstrationszwecken 
+        /// enthalten. !!!
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="onProgressChanged"></param>
@@ -82,6 +84,8 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         //FUNC
         private bool isCanceled = false;
 
+        /// !!! Diese Funktion wird nicht angewandt und ist aus Demonstrationszwecken 
+        /// enthalten. !!!
         public FileLoaderResult LoadFileContentChunkedWithCoreAffinity(
             string filePath,
             Action<int>? onProgressChanged,
