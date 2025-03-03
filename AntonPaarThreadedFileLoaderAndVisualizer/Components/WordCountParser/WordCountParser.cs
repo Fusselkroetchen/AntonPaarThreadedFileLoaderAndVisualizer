@@ -36,10 +36,10 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
         );
 
         /// <summary>
-        /// Nutzt Hardware ressourcen Vollständig aus, ohne die UI zu blockieren. Somit geht das Parsen viel
-        /// schneller.
-        /// 
         /// Zählt vorhandene Wörter.
+        /// 
+        /// Der zu parsene String wird in mehreren Teilen geparsed in unterschiedlichen Threads.
+        /// Somit werden die Hardware-Ressourcen besser ausgenutzt und das parsen geht schneller.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="onProgressChanged"></param>
@@ -164,10 +164,10 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.Components
         }
 
         /// <summary>
-        /// Nutzt Hardware ressourcen Vollständig aus, ohne die UI zu blockieren. Somit geht das Parsen viel
-        /// schneller.
-        /// 
         /// Zählt vorhandene Wörter.
+        /// 
+        /// Der zu parsene String wird in mehreren Teilen geparsed in unterschiedlichen Threads.
+        /// Somit werden die Hardware-Ressourcen besser ausgenutzt und das parsen geht schneller.
         /// </summary>
         /// <param name="text"></param>
         /// <param name="onProgressChanged"></param>

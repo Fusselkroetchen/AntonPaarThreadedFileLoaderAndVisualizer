@@ -33,7 +33,9 @@ namespace AntonPaarThreadedFileLoaderAndVisualizer.GenericComponents
         );
 
         /// <summary>
-        /// Lädt den Datei-Content mit prozess callback in Thead Chunks.
+        /// Lädt den Datei-Content mit prozess callback in Thead Chunks. 
+        /// Das bedeutet, dass ein Thread andere Teile der Datei lädt gleichzeitig.
+        /// Somit werden die Hardware-Ressourcen besser ausgenutzt und das laden geht schneller.
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="onProgressChanged"></param>
